@@ -1,5 +1,5 @@
-			SERVLET
-			-------
+						SERVLET
+						-------
 It is a "SERVER SIDE" technology which is used to:
 -handle the client request
 -process the request
@@ -16,7 +16,7 @@ It is a "SERVER SIDE" technology which is used to:
 -JBoss
 -WebLogic
 -IBM WebSphere
---------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
 CLIENT -------------->	 SERVER
           REQUEST	#containers
 			-Servlet container
@@ -32,13 +32,11 @@ CLIENT -------------->	 SERVER
 -JSP
 -Spring,SpringBoot
 -Struts,JSF
---------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
 #Hierarchy of Servlet
 ---------------------
--------
-Servlet-(Interface)(It defines Servlet life cycle 
--------
-methods ie init,service and destroy methods)
+Servlet-(Interface)(It defines Servlet life cycle methods ie init,service and destroy methods)
+-------------------
 	|
 	|
 --------------
@@ -54,10 +52,10 @@ specific methods & req-res objects such as doGet and doPost)
 
 NOTE:
 ----
-	PROTOCOL INDEPENDENT SERVLETS
-	-----------------------------
+				PROTOCOL INDEPENDENT SERVLETS
+				-----------------------------
 A protocol independent servlet is a servlet that can handle requests from different network protocols,such as HTTP,HTTPS,FTP and more.
---------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------
 #Use
 ----
 
