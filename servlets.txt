@@ -1,0 +1,753 @@
+			SERVLET
+			-------
+It is a "SERVER SIDE" technology which is used to:
+-handle the client request
+-process the request
+-generate "DYNAMIC RESPONSE".
+
+#Servers
+--------
+1)WEB SERVERS:
+-Apache Tomcat
+-Glass Fish
+-Jetty
+
+2)Application Server
+-JBoss
+-WebLogic
+-IBM WebSphere
+--------------------------------------------------------
+CLIENT -------------->	 SERVER
+          REQUEST	#containers
+			-Servlet container
+			-JSP container
+			-Security container
+			-WebSocket container
+			-JNDI container
+	<--------------
+	DYNAMIC RESPONSE
+
+#Other Server Side Technologies
+-------------------------------
+-JSP
+-Spring,SpringBoot
+-Struts,JSF
+--------------------------------------------------------
+#Hierarchy of Servlet
+---------------------
+-------
+Servlet-(Interface)(It defines Servlet life cycle 
+-------
+methods ie init,service and destroy methods)
+	|
+	|
+--------------
+GenericServlet-(Abstract Class)(when we want to create 
+--------------
+"protocol independent servlet" and we dont need req res object.)
+	|
+	|
+-----------
+HttpServlet-(Abstract Class)(it is used when we want HTTP 
+-----------
+specific methods & req-res objects such as doGet and doPost)
+
+NOTE:
+----
+	PROTOCOL INDEPENDENT SERVLETS
+	-----------------------------
+A protocol independent servlet is a servlet that can handle requests from different network protocols,such as HTTP,HTTPS,FTP and more.
+--------------------------------------------------------
+#Use
+----
+
+1)class MyServlet implements Servlet
+{
+
+	
+
+
+}
+
+2)class MyServlet extends GenericServlet
+{
+
+
+}
+
+3)class MyServlet extend HttpServlet
+{
+
+//MOST PREFERRED
+
+	@override
+
+	doGet(HttpServletRequest request, HttpServletResponse response)//similar to doGet(req,res)
+	{
+  		//backend code(task)	
+
+	}
+
+
+
+}
+
+NOTE:
+----
+We have to create one more file ie "DEPLOYMENT DESCRIPTOR" file ie "web.xml"
+
+a deployment descriptor is an XML file that provides configuration information to the web container (like Tomcat or Jetty) about how to deploy and manage the components of a web application.
+--------------------------------------------------------
+*shift + ctrl + f (to align text in eclipse)
+--------------------------------------------------------
+EXAMPLE:-
+package cls.backend;
+
+import java.io.IOException;
+
+import jakarta.servlet.GenericServlet;
+import jakarta.servlet.Servlet;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServlet;
+
+//SERVLET INTERFACE
+/*
+public class MyServlet1 implements Servlet 
+{
+	//all life cycle methods has to be overriden
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ServletConfig getServletConfig() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getServletInfo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void init(ServletConfig arg0) throws ServletException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void service(ServletRequest arg0, ServletResponse arg1) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}
+*/
+
+//GENERICSERVLET ABSTRACT CLASS
+/*
+public class MyServlet1 extends GenericServlet
+{
+	//service method has to be overriden
+	//we do not get doGet and doPost methods
+	@Override
+	public void service(ServletRequest arg0, ServletResponse arg1) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+}
+*/
+public class MyServlet1 extends HttpServlet
+{
+	//no methods has to be overriden
+}
+--------------------------------------------------------public class MyServlet1 extends HttpServlet
+{
+	//no methods has to be overriden
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
+	{
+		// back end code
+		System.out.println("IM IN DOGET METHOD");
+		PrintWriter out=res.getWriter();
+		out.print("HELLO WORLD FROM JAVA SERVLET");
+	}
+}
+
+web.xml file
+------------
+<servlet>
+			  <servlet-name>MyServlet</servlet-name>
+			  <servlet-class>cls.backend.MyServlet1</servlet-class>
+		  </servlet>
+  		<servlet-mapping>
+			  <servlet-name>MyServlet</servlet-name>
+			  <url-pattern>
+				  /aaa
+			  </url-pattern>
+		  </servlet-mapping>
+  
+</web-app>
+
+-the get method will check the url pattern if it matches then control goes to servlet and if the name matches then it will redirect to that project.
+--------------------------------------------------------
+		SERVLET LIFECYCLE
+		-----------------
+1)Loading and instantiating:
+
+-first MyServlet.java file will be compiled and .class file will be created and then .class servlet file will be loaded into the memory.
+
+-object of MyServlet will be created.
+-executed only once
+
+2)Initialisation:
+
+-init() will be invoked.
+ init() will initialise the servlet object.
+-executed only once
+
+3)Request Handling:
+
+-service() will be invoked.
+-It will handle or serve the client request.In this phase service() will be invoked.
+-service method will check what type of request we got
+if it is of get type then it'll call doGet() method and if it is of post type then it'll call doPost().
+-whenever a request is received a thread is generated. one thread will handle one request at a time.
+
+4)Destroy:
+
+-destroy() will be invoked.
+-when server get shut down the servlet object gets destroyed(deleted).
+-executes only once.
+
+--------------------------------------------------------
+		web.xml file
+		-----------
+-Also known as "DEPLOYMENT DESCRIPTOR" file.
+-A deployment descriptor is an XML file that provides "configuration information" to the web container (like Tomcat or Jetty) about how to deploy and manage the components of a web application
+-resides under WEB.INF folder.
+-earlier it was compulsory to create web.xml file but now in the latest version Servlet 3.0 and onwards it is not compulsory. We can use @annotations.
+
+#use: according to client request(through url) it maps the servlet through the servlet configuration it is containing.
+
+#syntax:
+
+<webapp>
+	<servlet-mapping>
+		<servlet-name>login</servlet-name>
+		<url-pattern>/login</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>login<servlet-name>
+		<servlet-class>fullyqualified name of servlet class</servlet-class>
+	<servlet>
+</webapp>
+
+will check the url pattern if it matches then control goes to servlet and if the name matches then it will redirect to that project.
+
+#tasks:
+1)Servlet Configuration
+2)JSP file Config.
+3)Filters Config.
+4)Listners Config.
+5)Error Page Config.
+6)Welcome Page Config.
+etc.
+
+--------------------------------------------------------
+		  Annotations
+		  -----------
+-Annotations are part of Java Servlet API and can be used in any version from servlet 3.0 onwards.
+-provide an alternative to configuring servlets in the web.xml deployment descriptor.
+-if we do not want to use web.xml file
+
+@WebServlet
+-jakarta.servlet.annotation.WebServlet
+-@WebServlet("/url")
+-@WebServlet(name = "MyServlet", urlPatterns = {"/myservlet"})
+
+@WebFilter
+@WebListener
+@MultipartConfig
+
+--------------------------------------------------------
+		HTTP REQUEST-RESPONSE
+		---------------------
+
+-HttpServletRequest and HttpServletResponse are two interfaces provided by the Java Servlet API, and they represent the request and response objects, respectively, in a servlet environment. These objects encapsulate the information and functionality required to process HTTP requests and generate HTTP responses.
+
+#HttpServletRequest:
+-------------------
+
+This interface represents an HTTP request sent by the client to the servlet. It provides methods to access information about the request, such as parameters, headers, session attributes, and more.
+Commonly used methods in HttpServletRequest include:
+
+getParameter(String name): Retrieves the value of a request parameter.
+
+getHeader(String name): Retrieves the value of a specified request header.
+
+getSession(): Retrieves the current session associated with this request.
+
+example:
+-------
+	String parameterValue = request.getParameter("parameterName");
+
+        String headerValue = request.getHeader("headerName");
+
+        HttpSession session = request.getSession();
+
+#HttpServletResponse:
+--------------------
+
+This interface represents an HTTP response that a servlet sends back to the client. It provides methods to set response headers, set the content type, and write data to the response.
+Commonly used methods in HttpServletResponse include:
+
+setContentType(String type): Sets the MIME type of the response.
+getWriter(): Returns a PrintWriter object for sending character text to the client.
+sendRedirect(String location): Redirects the client to a different URL.
+
+Example:
+-------
+
+doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    response.setContentType("text/html");
+
+    PrintWriter out = response.getWriter();
+    out.println("<html><body>");
+    out.println("<h1>Hello, this is the response content!</h1>");
+    out.println("</body></html>");
+}
+
+--------------------------------------------------------
+		doGet and doPost Methods
+		------------------------
+
+-HTTPServlets methods.
+-if we use only service method then it will execute the code irrespective of the method used ie get or post so if we want to execute the code only if the method is "post" then we have to take use of "doPost()" same goes for get.
+-When a servlet receives an HTTP request, the servlet container determines which method (doGet, doPost, etc.) to call based on the type of request. The appropriate method is then invoked.
+
+#doGet:
+
+The doGet method is called by the servlet container when the servlet receives an "HTTP GET" request. This method is used to handle requests that are intended to retrieve information without causing any side effects on the server.
+
+#doPost:
+
+The doPost method is called by the servlet container when the servlet receives an "HTTP POST" request. This method is used to handle requests that typically submit data to be processed on the server, leading to side effects such as updating a database.
+
+NOTE:
+----
+-doGet() and doPost() is used for Method-Specific Handling.
+-Service() is used for non Method-Specific Handling.
+
+--------------------------------------------------------
+			Session
+			-------
+-HTTP session management is a crucial aspect of web development that involves maintaining state and managing user-specific data throughout a user's interaction with a web application. Sessions are typically used to store information like user preferences, authentication status, and other data that needs to persist across multiple requests and responses. In Java web applications, the "HttpSession interface" provides a way to manage sessions.
+
+-if we want to display same info entered by user it is only possible for one url only for sustaining that info throughout a user interaction with a web application we use "Session".
+
+-for creating session object we take use of HttpServletRequest Interface.
+
+HttpSession hs=req.getSession();
+//first created then assigns.
+
+HttpSession is an interface.
+
+#METHODS:
+--------
+1)setAttribute(String name, Object value):
+Stores an attribute in the session.
+
+2)getAttribute(String name):
+Retrieves the value of the specified attribute from the session.
+
+3)removeAttribute(String name):
+Removes the attribute with the specified name from the session.
+
+4)getAttributeNames():
+Returns an enumeration of all attribute names in the session.
+
+5)setMaxInactiveInterval(int interval):
+Sets the maximum time, in seconds, that the session is considered valid.
+
+6)getId():
+Returns a unique identifier for the session.
+
+7)isNew():
+Returns true if the client does not yet know about the session or if the client chooses not to join the session.
+
+8)invalidate():
+deletes the whole session, effectively logging out the user.
+
+9)getLastAccessedTime():
+Returns the last time the client sent a request associated with this session.
+
+10)getMaxInactiveInterval():
+Returns the maximum time interval, in seconds, that the session should be considered valid.
+
+ex: 
+HttpSession hs= req.getSession();
+hs.setAttribute("key",value);
+hs.getAttribute("key");
+hs.removeAttribute("key");//deletes only one key
+hs.invalidate();//deletes whole session after logout
+
+
+#ways to delete session object:
+------------------------------
+1.using invalidate()
+2.closing browser
+3.using web.xml file
+--------------------------------------------------------
+		sendRedirect()
+		--------------
+-The sendRedirect(String location) method is a part of the "HttpServletResponse interface" in Java.
+-This method is used to redirect the client's browser to a different URL.
+-changes the url.
+-called through HttpServletResponse.
+-new request is created.
+		
+		RequestDispatcher
+		-----------------
+-The RequestDispatcher interface in Java is part of the servlet API and is used to forward a request from one servlet to another or include the content of another resource (servlet, JSP page, or HTML file) in the response.
+-doesn't change the url.
+-RequestDispatcher is like a traffic director in a web application. Imagine you're driving a car (the request) on the internet highway, and you come across a junction. The RequestDispatcher helps decide which road (servlet or resource) to take.
+-req.getRequestDispatcher()
+-security is maintained by not showing the route
+
+1)Forwarding a Request:
+It's like saying, "Hey, instead of going through this road, go through that road." The request gets sent to another place (servlet or resource) to do some work, and the response from that place comes back to you.
+
+2)Including Content in the Response:
+It's like saying, "Hey, while you're on this road, also check out that cool spot over there and tell me what's happening." The content from another place gets included in your response.
+
+ex:
+	res.setContentType("text/html");/*This line is used to set the content type of the response being sent back to the client. In this case, it's setting the content type to HTML, indicating that the response will contain HTML content.*/
+	out.print("email id and password didnt match");
+	RequestDispatcher rd =req.getRequestDispatcher("/login.html");
+	//rd.forward(req, res);
+	rd.include(req, res);//includes error message + code of login page to avoid that use res.setContentType("text/html").
+				
+
+
+
+3)Obtaining a RequestDispatcher:
+It's like asking for directions. You say, "Excuse me, where's the way to this place?" and the RequestDispatcher gives you directions (the way to another servlet or resource).
+
+4)Forwarding to an External Resource:
+Imagine if you want to go to a place outside the town. The RequestDispatcher isn't designed for that; it's more for places inside the town. For outside places, you might need a different way (like a browser redirect).
+
+5)Accessing Request and Response Attributes:
+It's like passing notes between friends. You write something on a note (set an attribute) and hand it to your friend (forward the request). When your friend gets the note, they can read what you wrote (access the attribute).
+
+In simpler terms, the RequestDispatcher helps manage where the "traffic" (requests) goes in your web application, allowing different "places" (servlets or resources) to handle different parts of the journey.
+
+
+		DIFFERENCE
+		----------
+sendRedirect():
+--------------
+-url changes
+-It is like telling someone to go to a completely different place.
+
+Example: You're at a restaurant, and you want your friend to go to a different restaurant across the street. You say, "Hey, go to that restaurant over there." Your friend leaves the current restaurant and goes to the new one. In web terms, sendRedirect() sends the user's browser to a different URL or web page.
+
+
+RequestDispatcher:
+-----------------
+-url remains same
+It is like asking someone else in the same place to help you out.
+
+Example: You're at a library, and there's a librarian who knows a lot about different sections. You ask the librarian, "Can you help me with books on programming?" The librarian takes you to the programming section and assists you. In web terms, RequestDispatcher forwards the request to another servlet or resource within the same web application.
+In short:
+
+Use sendRedirect() when you want to send the user's browser to a completely different place, often on a different website or with a different URL.
+
+Use RequestDispatcher when you want to keep the request within the same web application and delegate part of the work to another servlet or resource.
+
+Both are tools for managing the flow of requests in a web application.
+--------------------------------------------------------
+			FILTERING
+			---------
+-A servlet filter is a Java class that implements the javax.servlet.Filter interface
+-Filtering refers to the process of intercepting and modifying requests and responses before they reach the servlet or after they leave the servlet.
+-Filters are components that can be used to perform tasks such as authentication, logging, compression, encryption, or modification of request and response data.
+
+#Methods:
+--------
+1.init(FilterConfig config):
+---------------------------
+This is like setting up the filter. When the filter is created, this method is called.
+It's where the filter can do any necessary preparation or configuration.
+Imagine it as the filter getting ready for its job.
+
+2.doFilter(ServletRequest request, ServletResponse response, FilterChain chain):
+----------------------------
+This is where the actual work happens. Whenever a request comes in, the container calls this method.
+Here, the filter can inspect or modify the request before it reaches the servlet.
+It can also do something with the response before it goes back to the client.
+The FilterChain is like a relay baton. After the filter does its job, it passes the request and response to the next filter or servlet in line (or back to the servlet container if it's the last one).
+
+3.destroy():
+-----------
+This is like clean-up time for the filter. When the filter is being taken out of service, this method is called.
+It's an opportunity to release any resources or do final tasks.
+Think of it as the filter finishing its job and cleaning up after itself.
+
+ex:
+public class LoggingFilter implements Filter {
+
+    @Override
+   1. public void init(FilterConfig config) throws ServletException {
+        // Initialization code, if needed
+    }
+
+    @Override
+ 2.   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        // Log information about the incoming request
+        System.out.println("Request received at: " + System.currentTimeMillis());
+
+        // Pass the request and response to the next filter in the chain
+
+        chain.doFilter(request, response);
+
+        // Log information about the outgoing response
+
+        System.out.println("Response sent at: " + System.currentTimeMillis());
+    
+	}
+
+    @Override
+ 3.    public void destroy() {
+        // Cleanup code, if needed
+    }
+}
+
+In this example, the doFilter method logs information about the incoming request, then calls chain.doFilter to pass the request and response to the next filter or servlet in the chain, and finally logs information about the outgoing response.
+
+--------------------------------------------------------
+		Attributes and Listeners
+		------------------------
+-attributes and listeners are features used to enhance the functionality and flexibility of servlet-based web applications.
+
+I)Servlet Attributes:
+-------------------
+
+Servlet attributes are objects that can be set, retrieved, and removed at various scopes within a web application. These attributes are often used to share data between different parts of a web application, such as servlets, JSP pages, and filters.
+
+#Scope:
+------
+1)Request Scope:
+---------------
+Attributes set in the request scope are available only for the duration of a single HTTP request.
+They can be set using request.setAttribute("attributeName", attributeValue) and retrieved using request.getAttribute("attributeName").
+
+req.setAttribute()
+req.getAttribute()
+
+2)Session Scope:
+---------------
+Attributes set in the session scope are available throughout the entire user session.
+They can be set using session.setAttribute("attributeName", attributeValue) and retrieved using session.getAttribute("attributeName").
+
+HttpSession session = req.getSession();
+
+session.setAttribute()
+session.getAttribute()
+
+3)Application Scope:
+
+Attributes set in the application scope are available to all servlets and JSP pages in the entire web application.
+They can be set using servletContext.setAttribute("attributeName", attributeValue) and retrieved using servletContext.getAttribute("attributeName")
+
+servletContext.setAttribute()
+servletContext.getAttribute()
+
+II)Servlet Listeners:
+--------------------
+Servlet listeners are Java classes that allow developers to respond to specific events occurring in a web application, such as the creation, destruction, or attribute changes of servlets, sessions, or the entire application.
+
+#Types:
+------
+1)ServletContextListener:
+
+Responds to events related to the "entire web application", such as its initialization and destruction.
+Implement the ServletContextListener interface and override the contextInitialized and contextDestroyed methods.
+
+2)HttpSessionListener:
+
+Responds to events related to "sessions", such as their creation and destruction.
+Implement the HttpSessionListener interface and override the sessionCreated and sessionDestroyed methods.
+
+3)ServletRequestListener and 
+ServletRequestAttributeListener:
+
+ServletRequestListener responds to events related to the "request lifecycle", such as its creation and destruction.
+ServletRequestAttributeListener responds to events related to changes in request attributes.
+Implement the respective interfaces (ServletRequestListener or ServletRequestAttributeListener) and override the relevant methods.
+
+#Use:
+---
+Imagine you have a website, and each time a user visits, they get a unique "session" that keeps track of their interactions with the site. Now, you want to know when a new session starts or when an existing session ends.
+
+Here's where the HttpSessionListener comes in:
+
+Event: New Session (User Visits):
+
+Listener: "Hey, a new user just arrived! Let me know."
+Your Code: "Great! I'll do something special for this new user."
+Event: Session Ends (User Leaves or Times Out):
+
+Listener: "Oh, the user just left or their session timed out. Notify me."
+Your Code: "Alright, I'll clean up and maybe save some data before they go."
+
+--------------------------------------------------------
+		STATE MANAGEMENT
+		----------------
+-State management in servlets refers to the mechanisms used to maintain information about a user's interactions with a web application across multiple requests and responses.
+- Since HTTP is a stateless protocol, servlets need ways to keep track of user data as they navigate through different pages or perform actions on a website.
+
+#Methods/ways:
+-------------
+1)Session Tracking:
+------------------
+Sessions are a way to store user-specific information on the server side.
+Each user gets a unique session, and data stored in the session is accessible across multiple requests.
+HttpSession is commonly used for session tracking in servlets.
+Example: Storing user login information, shopping cart contents, etc.
+
+2)Cookies:
+---------
+Cookies are small pieces of data stored on the client side (user's browser).
+They are sent back and forth with each request and response.
+Cookies can store information such as user preferences, session IDs, etc.
+Example: Remembering a user's language preference.
+
+3)URL Rewriting:
+---------------
+In this method, information is encoded in the URL itself.
+The servlet modifies URLs to include session IDs or other data.
+Useful when cookies are disabled on the client side.
+Example: Adding a session ID to URLs for session tracking.
+
+4)Hidden Form Fields:
+--------------------
+Information can be stored in HTML forms as hidden fields.
+The data is sent back to the server when the form is submitted.
+Example: Storing data that needs to be persisted between form submissions.
+
+5)ServletContext and ServletConfig:
+----------------------------------
+ServletContext and ServletConfig objects provide application-wide and servlet-specific information, respectively.
+They are useful for sharing data across different parts of an application.
+Example: Storing configuration settings that apply to the entire application.
+
+--------------------------------------------------------
+		HANDLING COOKIES
+		----------------
+-Cookies are small pieces of data stored on the client side, and they can be used to maintain user-specific information between different requests and sessions.
+-Handling cookies in servlets involves both sending cookies to the client (browser) and receiving cookies from the client in subsequent requests.
+
+Ex:
+--
+Sending Cookies:
+---------------
+ protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        // Create a new cookie
+        Cookie userCookie = new Cookie("username", "john_doe");
+
+        // Set the cookie's lifespan (in seconds)
+        userCookie.setMaxAge(24 * 60 * 60); // 1 day
+
+        // Add the cookie to the response
+        response.addCookie(userCookie);
+    }
+
+Receiving Cookies:
+---------------
+protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        // Retrieve all cookies from the request
+        Cookie[] cookies = request.getCookies();
+
+        // Check if cookies exist
+        if (cookies != null) {
+            // Iterate through the cookies
+            for (Cookie cookie : cookies) {
+                // Check for a specific cookie by name
+                if (cookie.getName().equals("username")) {
+                    String username = cookie.getValue();
+                    // Do something with the username...
+                }
+            }
+        }
+    }
+}
+
+--------------------------------------------------------
+	ServletConfig and ServletContext
+	--------------------------------
+-ServletConfig and ServletContext are two important objects in the servlet environment, and they provide different scopes of configuration information within a web application.
+
+I.ServletConfig:
+---------------
+#Definition:
+-----------
+ServletConfig is an object that contains configuration information for a specific servlet.
+Each servlet in a web application has its own ServletConfig object.
+
+#Usage:
+------
+It is typically used to retrieve initialization parameters defined in the deployment descriptor (web.xml).
+Initialization parameters provide a way to configure a servlet without modifying its code.
+
+#Ex:
+---
+public class MyServlet extends HttpServlet {
+    private String servletParam;
+
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        // Retrieve initialization parameter from ServletConfig
+        servletParam = config.getInitParameter("parameterName");
+    }
+}
+
+II.ServletContext:
+-----------------
+#Definition:
+----------
+ServletContext is an object that represents the entire web application.
+It is shared among all servlets in the same web application.
+
+#Usage:
+------
+It is used to get information about the web application, such as its name, version, and context path.
+It can be used to set and get attributes that are shared among servlets and other components within the application.
+
+#Ex:
+---
+public class MyServlet extends HttpServlet {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Get ServletContext from the request object
+        ServletContext context = request.getServletContext();
+        
+        // Get information about the web application
+        String appName = context.getServletContextName();
+        String appVersion = context.getInitParameter("version");
+
+        // Set and get attributes
+        context.setAttribute("attributeName", "attributeValue");
+        String attributeValue = (String) context.getAttribute("attributeName");
+    }
+}
